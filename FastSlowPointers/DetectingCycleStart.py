@@ -10,13 +10,8 @@ class Node:
         self.value = value
         self.next = next
 
-    def print_list(self):
-        temp = self
-        while temp is not None:
-            print(temp.value, end='')
-            temp = temp.next
-        print()
-
+    def __repr__(self):
+        return f"Node({self.value})"
 
 def find_cycle_length(slow):
     count = 1
@@ -79,21 +74,22 @@ def find_cycle_start(head):
 
 
 def main():
-    head = Node(1)
-    head.next = Node(2)
-    head.next.next = Node(3)
-    head.next.next.next = Node(4)
-    head.next.next.next.next = Node(5)
-    head.next.next.next.next.next = Node(6)
+    one = Node(1)
+    two = Node(2)
+    three = Node(3)
+    four = Node(4)
+    five = Node(5)
+    six = Node(6)
 
-    head.next.next.next.next.next.next = head.next.next
-    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
+    # Cycle
+    six.next = four
 
-    head.next.next.next.next.next.next = head.next.next.next
-    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
+    one.next = two
+    two.next = three
+    three.next = four
+    four.next = five
+    five.next = six
 
-    head.next.next.next.next.next.next = head
-    print("LinkedList cycle start: " + str(find_cycle_start(head).value))
-
+    print(str(find_cycle_start(one)))
 
 main()

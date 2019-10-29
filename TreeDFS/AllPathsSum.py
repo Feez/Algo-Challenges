@@ -1,3 +1,6 @@
+# For balanced binary tree, will be O(n*log(n)) because 
+# max path depth is O(log(n)) due to height of tree.
+
 class TreeNode:
     def __init__(self, val, left=None, right=None):
         self.val = val

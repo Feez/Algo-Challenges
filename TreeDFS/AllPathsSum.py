@@ -12,14 +12,17 @@ class TreeNode:
         curr_val = goal - self.val
 
         if curr_val == 0:
-            all_paths.append(curr_path)
+            all_paths.append(list(curr_path))
 
         if self.left is not None:
-            self.left.dfs(goal=curr_val, all_paths=all_paths, curr_path=list(curr_path))
+            self.left.dfs(goal=curr_val, all_paths=all_paths, curr_path=curr_path)
         
         if self.right is not None:
-            self.right.dfs(goal=curr_val, all_paths=all_paths, curr_path=list(curr_path))
-
+            self.right.dfs(goal=curr_val, all_paths=all_paths, curr_path=curr_path)
+        
+        # Remove node from stack as backtrack
+        curr_path.pop()
+        
         return all_paths
 
 

@@ -3,6 +3,8 @@ class Cube:
 
     UP_ROTATION = [0, 1, 2, 3]
     RIGHT_ROTATION = [0, 5, 2, 4]
+    SIDE_ROTATION = [4, 5]
+    TOP_ROTATION = [1, 3]
 
     def __init__(self, n : int):
         self.cube = self.get_cube(n)
@@ -20,6 +22,25 @@ class Cube:
 
         return '\n\n'.join(side for side in side_output)
 
+    def __rotate_face_right(self, side : int):
+        # https://leetcode.com/problems/rotate-image/
+
+        n = self.n
+
+        for i in range(n // 2 + n % 2):
+            for j in range(n // 2):
+                tmp = self.cube[(side, n - 1 - j, i)]
+                self.cube[(side, n - 1 - j, i)] = self.cube[(side, n - 1 - i, n - j - 1)]
+                self.cube[(side, n - 1 - i, n - j - 1)] = self.cube[(side, j, n - 1 - i)]
+                self.cube[(side, j, n - 1 - i)] = self.cube[(side, i, j)]
+                self.cube[(side, i, j)] = tmp
+
+    def __rotate_face_left(self, side : int):
+        assert(side >= 0 and side < len(self.SIDE_COLORS))
+
+        for i in range(len(self.RIGHT_ROTATION) - 1):
+            self.__rotate_face_right(side)
+
     def rotate_up(self, col : int):
         assert(col >= 0 and col < self.n)
 
@@ -31,6 +52,11 @@ class Cube:
             for row in range(self.n):
                 self.cube[(prev_side, row, col)], self.cube[(curr_side, row, col)] = self.cube[(curr_side, row, col)], self.cube[(prev_side, row, col)]
 
+        if col == 0:
+            self.__rotate_face_right(self.SIDE_ROTATION[0])
+        elif col == self.n - 1:
+            self.__rotate_face_right(self.SIDE_ROTATION[1])
+
     def rotate_right(self, row : int):
         assert(row >= 0 and row < self.n)
 
@@ -41,7 +67,12 @@ class Cube:
 
             for col in range(self.n):
                 self.cube[(prev_side, row, col)], self.cube[(curr_side, row, col)] = self.cube[(curr_side, row, col)], self.cube[(prev_side, row, col)]
-        
+
+        if row == 0:
+            self.__rotate_face_left(self.TOP_ROTATION[0])
+        elif row == self.n - 1:
+            self.__rotate_face_left(self.TOP_ROTATION[1])
+    
     def rotate_down(self, col : int):
         assert(col >= 0 and col < self.n)
 
@@ -58,12 +89,9 @@ class Cube:
 def main():
     cube = Cube(3)
 
-    cube.rotate_up(2)
-
-    print("Cube:")
-    print(cube)
-
+    cube.rotate_up(1)
     cube.rotate_right(0)
+    cube.rotate_left(2)
 
     print("Cube:")
     print(cube)
